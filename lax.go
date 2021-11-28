@@ -3,10 +3,16 @@ package lax
 
 // Logger is an abstraction of typical logger methods.
 type Logger interface {
+	// Debug sends a message to logger at debug level.
 	Debug(string, ...Field)
+	// Info sends a message to logger at info level.
 	Info(string, ...Field)
+	// Warn sends a message to logger at warn level.
 	Warn(string, ...Field)
+	// Error sends a message to logger at error level.
 	Error(string, ...Field)
+	// Flush flushes buffer ignoring eventual error.
+	Flush()
 }
 
 type vType uint8
@@ -17,6 +23,8 @@ const (
 	tString
 	tUint
 	tInt
+	tTime
+	tDuration
 )
 
 // Field is a general type to log typed values as log message attributes.

@@ -1,6 +1,8 @@
 package lax
 
 import (
+	"time"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -37,6 +39,11 @@ func (l *ZapAdapter) Error(message string, fields ...Field) {
 	l.l.Error(message, l.toZapFields(fields)...)
 }
 
+// Flush flushes buffer ignoring eventual error.
+func (l *ZapAdapter) Flush() {
+	_ = l.l.Sync()
+}
+
 func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field {
 	zfs := make([]zapcore.Field, 0, len(fields))
 
@@ -52,6 +59,10 @@ func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field {
 			zfs = append(zfs, zap.Uint(field.key, field.value.(uint)))
 		case tInt:
 			zfs = append(zfs, zap.Int(field.key, field.value.(int)))
+		case tTime:
+			zfs = append(zfs, zap.Time(field.key, field.value.(time.Time)))
+		case tDuration:
+			zfs = append(zfs, zap.Duration(field.key, field.value.(time.Duration)))
 		}
 	}
 
