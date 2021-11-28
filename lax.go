@@ -1,6 +1,8 @@
 // Package lax contains logger abstraction and adapters for the most common loggers.
 package lax
 
+import "time"
+
 // Logger is an abstraction of typical logger methods.
 type Logger interface {
 	// Debug sends a message to logger at debug level.
@@ -13,6 +15,8 @@ type Logger interface {
 	Error(string, ...Field)
 	// Flush flushes buffer ignoring eventual error.
 	Flush()
+	// Inner returns original logger implementation.
+	Inner() interface{}
 }
 
 type vType uint8
@@ -74,6 +78,24 @@ func Int(key string, value int) Field {
 	return Field{
 		key:   key,
 		vType: tInt,
+		value: value,
+	}
+}
+
+// Time creates field with an attribute of time.Time type.
+func Time(key string, value time.Time) Field {
+	return Field{
+		key:   key,
+		vType: tTime,
+		value: value,
+	}
+}
+
+// Duration creates field with an attribute of time.Duration type.
+func Duration(key string, value time.Duration) Field {
+	return Field{
+		key:   key,
+		vType: tDuration,
 		value: value,
 	}
 }

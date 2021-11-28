@@ -44,6 +44,11 @@ func (l *ZapAdapter) Flush() {
 	_ = l.l.Sync()
 }
 
+// Inner returns zap logger implementation.
+func (l *ZapAdapter) Inner() interface{} {
+	return l.l
+}
+
 func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field {
 	zfs := make([]zapcore.Field, 0, len(fields))
 
