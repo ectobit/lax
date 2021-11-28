@@ -15,8 +15,6 @@ type Logger interface {
 	Error(string, ...Field)
 	// Flush flushes buffer ignoring eventual error.
 	Flush()
-	// Inner returns original logger implementation.
-	Inner() interface{}
 }
 
 type vType uint8

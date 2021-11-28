@@ -7,6 +7,8 @@
 
 Logger abstraction in Go.
 
+Besides implementing own logger interface, all adapters also implement [pgx.Logger](https://github.com/jackc/pgx/blob/master/logger.go) interface and may implement more interfaces in the future. This eliminates usage of multiple adapters.
+
 ## Adapters
 
 - [zap](https://github.com/uber-go/zap)
