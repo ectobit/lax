@@ -68,7 +68,7 @@ func (l *ZapAdapter) Log(ctx context.Context, level pgx.LogLevel, msg string, da
 	}
 }
 
-func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field {
+func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field { //nolint:cyclop
 	zfs := make([]zapcore.Field, 0, len(fields))
 
 	for _, field := range fields {
@@ -89,6 +89,8 @@ func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field {
 			zfs = append(zfs, zap.Duration(field.key, field.value.(time.Duration)))
 		case tUint8:
 			zfs = append(zfs, zap.Uint8(field.key, field.value.(uint8)))
+		case tUint64:
+			zfs = append(zfs, zap.Uint64(field.key, field.value.(uint64)))
 		}
 	}
 
