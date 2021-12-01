@@ -27,6 +27,7 @@ const (
 	tInt
 	tTime
 	tDuration
+	tUint8
 )
 
 // Field is a general type to log typed values as log message attributes.
@@ -64,6 +65,15 @@ func String(key string, value string) Field {
 
 // Uint creates field with an attribute of uint type.
 func Uint(key string, value uint) Field {
+	return Field{
+		key:   key,
+		vType: tUint,
+		value: value,
+	}
+}
+
+// Uint8 creates field with an attribute of uint8 type.
+func Uint8(key string, value uint8) Field {
 	return Field{
 		key:   key,
 		vType: tUint,

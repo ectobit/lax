@@ -136,6 +136,39 @@ func TestUint(t *testing.T) {
 	}
 }
 
+func TestUint8(t *testing.T) {
+	t.Parallel()
+
+	tests := map[string]struct {
+		in   uint8
+		want Field
+	}{
+		"zero": {0, Field{"test", tUint, uint8(0)}},
+		"some": {5, Field{"test", tUint, uint8(5)}},
+	}
+
+	for n, test := range tests { //nolint:paralleltest
+		test := test
+
+		t.Run(n, func(t *testing.T) {
+			t.Parallel()
+
+			got := Uint8("test", test.in)
+			if got.key != test.want.key {
+				t.Errorf("want %q, got %q", test.want.key, got.key)
+			}
+
+			if got.vType != test.want.vType {
+				t.Errorf("want %d, got %d", test.want.vType, got.vType)
+			}
+
+			if got.value != test.want.value {
+				t.Errorf("want %d, got %d", test.want.value, got.value)
+			}
+		})
+	}
+}
+
 func TestInt(t *testing.T) {
 	t.Parallel()
 
