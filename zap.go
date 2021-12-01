@@ -2,6 +2,7 @@ package lax
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v4"
@@ -17,6 +18,45 @@ type ZapAdapter struct {
 // NewZapAdapter creates zap logger adapter.
 func NewZapAdapter(l *zap.Logger) *ZapAdapter {
 	return &ZapAdapter{l: l}
+}
+
+// NewDefaultZapAdapter creates zap logger adapter using ectobit.com proposed configuration.
+// logFormat may be either console or json.
+// logLevel may be one of debug, info, warn or error. At debug level and console format output will be colored.
+func NewDefaultZapAdapter(logFormat, logLevel string) (*ZapAdapter, error) {
+	level := zap.NewAtomicLevel()
+
+	encodeLevel := zapcore.LowercaseLevelEncoder
+	if logFormat == "console" && logLevel == "debug" {
+		encodeLevel = zapcore.CapitalColorLevelEncoder
+	}
+
+	config := zap.Config{ //nolint:exhaustivestruct
+		Level:       level,
+		Development: logLevel == "debug",
+		Encoding:    logFormat,
+		EncoderConfig: zapcore.EncoderConfig{ //nolint:exhaustivestruct
+			CallerKey:      "caller",
+			EncodeCaller:   zapcore.ShortCallerEncoder,
+			EncodeDuration: zapcore.StringDurationEncoder,
+			EncodeLevel:    encodeLevel,
+			EncodeTime:     zapcore.ISO8601TimeEncoder,
+			LevelKey:       "level",
+			MessageKey:     "msg",
+			NameKey:        "logger",
+			StacktraceKey:  "stack",
+		},
+
+		OutputPaths:      []string{"stdout"},
+		ErrorOutputPaths: []string{"stderr"},
+	}
+
+	logger, err := config.Build(zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
+	if err != nil {
+		return nil, fmt.Errorf("build config: %w", err)
+	}
+
+	return NewZapAdapter(logger), nil
 }
 
 // Debug sends a message to logger at debug level.
