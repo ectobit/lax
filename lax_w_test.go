@@ -103,7 +103,7 @@ func TestString(t *testing.T) {
 	}
 }
 
-func TestUint(t *testing.T) {
+func TestUint(t *testing.T) { //nolint:dupl
 	t.Parallel()
 
 	tests := map[string]struct {
@@ -136,15 +136,15 @@ func TestUint(t *testing.T) {
 	}
 }
 
-func TestUint8(t *testing.T) {
+func TestUint8(t *testing.T) { //nolint:dupl
 	t.Parallel()
 
 	tests := map[string]struct {
 		in   uint8
 		want Field
 	}{
-		"zero": {0, Field{"test", tUint, uint8(0)}},
-		"some": {5, Field{"test", tUint, uint8(5)}},
+		"zero": {0, Field{"test", tUint8, uint8(0)}},
+		"some": {5, Field{"test", tUint8, uint8(5)}},
 	}
 
 	for n, test := range tests { //nolint:paralleltest

@@ -87,6 +87,8 @@ func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field {
 			zfs = append(zfs, zap.Time(field.key, field.value.(time.Time)))
 		case tDuration:
 			zfs = append(zfs, zap.Duration(field.key, field.value.(time.Duration)))
+		case tUint8:
+			zfs = append(zfs, zap.Uint8(field.key, field.value.(uint8)))
 		}
 	}
 

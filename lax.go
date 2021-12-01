@@ -76,7 +76,7 @@ func Uint(key string, value uint) Field {
 func Uint8(key string, value uint8) Field {
 	return Field{
 		key:   key,
-		vType: tUint,
+		vType: tUint8,
 		value: value,
 	}
 }
