@@ -21,42 +21,18 @@ func NewZapAdapter(l *zap.Logger) *ZapAdapter {
 }
 
 // NewDefaultZapAdapter creates zap logger adapter using ectobit.com proposed configuration.
-// logFormat may be either console or json.
-// logLevel may be one of debug, info, warn or error. At debug level and console format output will be colored.
-func NewDefaultZapAdapter(logFormat, logLevel string) (*ZapAdapter, error) {
-	level := zap.NewAtomicLevel()
-
-	encodeLevel := zapcore.LowercaseLevelEncoder
-	if logFormat == "console" && logLevel == "debug" {
-		encodeLevel = zapcore.CapitalColorLevelEncoder
-	}
-
-	config := zap.Config{ //nolint:exhaustivestruct
-		Level:       level,
-		Development: logLevel == "debug",
-		Encoding:    logFormat,
-		EncoderConfig: zapcore.EncoderConfig{ //nolint:exhaustivestruct
-			CallerKey:      "caller",
-			EncodeCaller:   zapcore.ShortCallerEncoder,
-			EncodeDuration: zapcore.StringDurationEncoder,
-			EncodeLevel:    encodeLevel,
-			EncodeTime:     zapcore.ISO8601TimeEncoder,
-			LevelKey:       "level",
-			MessageKey:     "msg",
-			NameKey:        "logger",
-			StacktraceKey:  "stack",
-		},
-
-		OutputPaths:      []string{"stdout"},
-		ErrorOutputPaths: []string{"stderr"},
-	}
-
-	logger, err := config.Build(zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
+//
+// format may be either console or json.
+// level may be one of debug, info, warn or error. For level debug and format console output will be colored.
+//
+// Logger will show stack trace just in error case.
+func NewDefaultZapAdapter(format, level string) (*ZapAdapter, error) {
+	log, err := NewZapLogger(format, level, 1)
 	if err != nil {
-		return nil, fmt.Errorf("build config: %w", err)
+		return nil, fmt.Errorf("new zap logger: %w", err)
 	}
 
-	return NewZapAdapter(logger), nil
+	return NewZapAdapter(log), nil
 }
 
 // Debug sends a message to logger at debug level.
@@ -135,4 +111,49 @@ func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field { //nolint:cycl
 	}
 
 	return zfs
+}
+
+// NewZapLogger creates zap logger using ectobit.com proposed configuration.
+//
+// format may be either console or json.
+// level may be one of debug, info, warn or error. For level debug and format console output will be colored.
+// callerSkip defines how many callers should be skipped when logging. Useful when zap logger is wrapped.
+//
+// Logger will show stack trace just in error case.
+func NewZapLogger(format, level string, callerSkip int) (*zap.Logger, error) {
+	encodeLevel := zapcore.LowercaseLevelEncoder
+	if format == "console" && level == "debug" {
+		encodeLevel = zapcore.CapitalColorLevelEncoder
+	}
+
+	zapLevel := zap.NewAtomicLevel()
+
+	if err := zapLevel.UnmarshalText([]byte(level)); err != nil {
+		return nil, fmt.Errorf("parse loglevel: %w", err)
+	}
+
+	config := zap.Config{ //nolint:exhaustivestruct
+		Level:    zapLevel,
+		Encoding: format,
+		EncoderConfig: zapcore.EncoderConfig{ //nolint:exhaustivestruct
+			CallerKey:      "caller",
+			EncodeCaller:   zapcore.ShortCallerEncoder,
+			EncodeDuration: zapcore.StringDurationEncoder,
+			EncodeLevel:    encodeLevel,
+			EncodeTime:     zapcore.ISO8601TimeEncoder,
+			LevelKey:       "level",
+			MessageKey:     "message",
+			NameKey:        "logger",
+			StacktraceKey:  "stack",
+		},
+		OutputPaths:      []string{"stdout"},
+		ErrorOutputPaths: []string{"stderr"},
+	}
+
+	logger, err := config.Build(zap.AddCallerSkip(callerSkip), zap.AddStacktrace(zapcore.ErrorLevel))
+	if err != nil {
+		return nil, fmt.Errorf("build config: %w", err)
+	}
+
+	return logger, nil
 }
