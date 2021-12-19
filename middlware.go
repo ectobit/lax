@@ -9,21 +9,19 @@ import (
 
 // Middleware is Go idiomatic middleware which logs request statistic data using lax logger.
 // Additionally, If Chi's middleware.RequestID is used before this middleware, request id will be logged.
-type Middleware struct {
+func Middleware(log Logger) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return &mw{next, log}
+	}
+}
+
+type mw struct {
 	next http.Handler
 	log  Logger
 }
 
-// NewMiddleware creates new lax logger middleware.
-func NewMiddleware(next http.Handler, log Logger) *Middleware {
-	return &Middleware{
-		next: next,
-		log:  log,
-	}
-}
-
 // ServeHTTP implements http.Handler interface.
-func (m *Middleware) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+func (m *mw) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	writer := middleware.NewWrapResponseWriter(res, req.ProtoMajor)
 	start := time.Now()
 
