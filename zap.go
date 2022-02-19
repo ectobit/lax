@@ -92,21 +92,21 @@ func (l *ZapAdapter) toZapFields(fields []Field) []zapcore.Field { //nolint:cycl
 		case tAny:
 			zfs = append(zfs, zap.Any(field.key, field.value))
 		case tError:
-			zfs = append(zfs, zap.Error(field.value.(error)))
+			zfs = append(zfs, zap.Error(field.value.(error))) //nolint:forcetypeassert
 		case tString:
-			zfs = append(zfs, zap.String(field.key, field.value.(string)))
+			zfs = append(zfs, zap.String(field.key, field.value.(string))) //nolint:forcetypeassert
 		case tUint:
-			zfs = append(zfs, zap.Uint(field.key, field.value.(uint)))
+			zfs = append(zfs, zap.Uint(field.key, field.value.(uint))) //nolint:forcetypeassert
 		case tInt:
-			zfs = append(zfs, zap.Int(field.key, field.value.(int)))
+			zfs = append(zfs, zap.Int(field.key, field.value.(int))) //nolint:forcetypeassert
 		case tTime:
-			zfs = append(zfs, zap.Time(field.key, field.value.(time.Time)))
+			zfs = append(zfs, zap.Time(field.key, field.value.(time.Time))) //nolint:forcetypeassert
 		case tDuration:
-			zfs = append(zfs, zap.Duration(field.key, field.value.(time.Duration)))
+			zfs = append(zfs, zap.Duration(field.key, field.value.(time.Duration))) //nolint:forcetypeassert
 		case tUint8:
-			zfs = append(zfs, zap.Uint8(field.key, field.value.(uint8)))
+			zfs = append(zfs, zap.Uint8(field.key, field.value.(uint8))) //nolint:forcetypeassert
 		case tUint64:
-			zfs = append(zfs, zap.Uint64(field.key, field.value.(uint64)))
+			zfs = append(zfs, zap.Uint64(field.key, field.value.(uint64))) //nolint:forcetypeassert
 		}
 	}
 

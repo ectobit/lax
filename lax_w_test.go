@@ -63,8 +63,8 @@ func TestError(t *testing.T) {
 				t.Errorf("want %d, got %d", test.want.vType, got.vType)
 			}
 
-			if got.value.(error).Error() != test.want.value {
-				t.Errorf("want %q, got %q", test.want.value, got.value.(error).Error())
+			if got.value.(error).Error() != test.want.value { //nolint:forcetypeassert
+				t.Errorf("want %q, got %q", test.want.value, got.value.(error).Error()) //nolint:forcetypeassert
 			}
 		})
 	}
@@ -96,8 +96,8 @@ func TestString(t *testing.T) {
 				t.Errorf("want %d, got %d", test.want.vType, got.vType)
 			}
 
-			if got.value.(string) != test.want.value {
-				t.Errorf("want %q, got %q", test.want.value, got.value.(string))
+			if got.value.(string) != test.want.value { //nolint:forcetypeassert
+				t.Errorf("want %q, got %q", test.want.value, got.value.(string)) //nolint:forcetypeassert
 			}
 		})
 	}
