@@ -49,7 +49,7 @@ func Any(key string, value interface{}) Field {
 
 // Error creates field with an attribute of error type.
 func Error(value error) Field {
-	return Field{ //nolint:exhaustivestruct
+	return Field{ //nolint:exhaustruct
 		vType: tError,
 		value: value,
 	}

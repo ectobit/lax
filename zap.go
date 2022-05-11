@@ -132,10 +132,10 @@ func NewZapLogger(format, level string, callerSkip int) (*zap.Logger, error) {
 		return nil, fmt.Errorf("parse loglevel: %w", err)
 	}
 
-	config := zap.Config{ //nolint:exhaustivestruct
+	config := zap.Config{ //nolint:exhaustruct
 		Level:    zapLevel,
 		Encoding: format,
-		EncoderConfig: zapcore.EncoderConfig{ //nolint:exhaustivestruct
+		EncoderConfig: zapcore.EncoderConfig{ //nolint:exhaustruct
 			CallerKey:      "caller",
 			EncodeCaller:   zapcore.ShortCallerEncoder,
 			EncodeDuration: zapcore.StringDurationEncoder,
