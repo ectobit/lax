@@ -1,8 +1,7 @@
 .PHONY: lint test test-cov
 
 lint:
-	@golangci-lint run --exclude-use-default=false --enable-all \
-		--disable exhaustivestruct
+	@golangci-lint run
 
 test:
 	@go test -race ./...
