@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/jackc/pgx/v4 v4.17.0
-	go.uber.org/zap v1.21.0
+	go.uber.org/zap v1.22.0
 )
 
 require (
