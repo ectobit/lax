@@ -18,6 +18,6 @@ require (
 	github.com/jackc/pgtype v1.12.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	golang.org/x/crypto v0.0.0-20221010152910-d6f0a8c073c2 // indirect
+	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a // indirect
 	golang.org/x/text v0.3.8 // indirect
 )
