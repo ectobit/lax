@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/go-chi/chi/v5 v5.0.8
-	github.com/jackc/pgx/v4 v4.18.0
+	github.com/jackc/pgx/v4 v4.18.1
 	go.uber.org/zap v1.24.0
 )
 
@@ -18,6 +18,6 @@ require (
 	github.com/jackc/pgtype v1.14.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
-	golang.org/x/crypto v0.6.0 // indirect
-	golang.org/x/text v0.7.0 // indirect
+	golang.org/x/crypto v0.7.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
 )
